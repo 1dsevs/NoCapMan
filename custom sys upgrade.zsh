@@ -5,24 +5,20 @@ function log()
 	echo "$1" >> log.txt 
 }
 
-function extract()
+function sort()
 {
-	unprocessed_dir=$1
-	
-	length=${#unprocessed_dir}
-	
-	dir=${unprocessed_dir[6,length]}
-	
-	mkdir "cache/${dir%.pkg.tar.zst}"
-	tar -k -C "cache/${dir%.pkg.tar.zst}" -x ".PKGINFO" -f "$1"
+	cat $1 | sort -o "${1%.txt}_sorted.txt"
 }
 
 log "Program Start\n"
 
 rm -r -f cache/* #clears the cache
 
-for f in pkgs/*.pkg.tar.zst; do
-	extract "$f" 
-	echo "extracted ${f%.pkg.tar.zst}"
-	log "extracted ${f%.pkg.tar.zst}"
+mkdir deps
+
+for f in deps/*; do
+	sort "$f" 
+	echo "sorted ${f%.pkg.tar.zst}"
+	log "sorted ${f%.pkg.tar.zst}"
 ;done
+
